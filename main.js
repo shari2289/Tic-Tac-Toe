@@ -1,5 +1,12 @@
+
 /*----- constants -----*/
-const winningCombinations = [
+const lookup = {
+  '1': 'pink',
+  '-1': 'light blue',
+  'null': 'black'
+};
+
+const winningCombos = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -7,68 +14,63 @@ const winningCombinations = [
   [1, 4, 7],
   [2, 5, 8],
   [0, 4, 8],
-  [2, 4, 6],
+  [2, 4, 6]
 ];
+
 /*----- app's state (variables) -----*/
 let board;
-let turn = X;
+let turn;
 let winner;
+
 /*----- cached element references -----*/
-const squares = Array.from(document.querySelectorAll("#board div"));
+const squares = document.querySelectorAll('td div');
+const message = document.querySelector('h1');
+
 /*----- event listeners -----*/
-document.getElementById("board").addEventListener("click", handleTurn);
+document.querySelector('table').addEventListener('click', handleMove);
+document.querySelector('button').addEventListener('click', initialize);
+
 /*----- functions -----*/
-function init() {
-  board = ["", "", "", "", "", "", "", "", ""];
+
+initialize();
+
+function handleMove(evt) {
+  
+  const idx = parseInt(evt.target.id.replace('sq', ''));
+  
+  if (board[idx] || winner) return;
+  
+  board[idx] = turn;
+  turn *= -1;
+  winner = getWinner();
   render();
+};
 
-  function render() {
-    board.forEach(function (mark, index) {
-      squares[index].textContent = mark;
-    });
-    messages.textContent =
-      win === "P"
-        ? `That's a tie, that's so not Fetch!`
-        : win
-        ? `${win} Won! You GO Glen Coco!`
-        : `It's ${turn}'s turn!`;
+function getWinner() {
+  for (let i = 0; i < winningCombos.length; i++) {
+    if (Math.abs(board[winningCombos[i][0]] + board[winningCombos[i][1]] + board[winningCombos[i][2]]) === 3) return board[winningCombos[i][0]];
   }
+  
+  if (board.includes(null)) return null;
+  return 'T';
+};
 
-  function getWinner() {
-    let winner = null;
-    winningCombos.forEach(function (combo, index) {
-      if (
-        board[combo[0]] &&
-        board[combo[0]] === board[combo[1]] &&
-        board[combo[0]] === board[combo[2]]
-      )
-        winner = board[combo[0]];
-    });
-    return winner ? winner : board.includes("") ? null : "P";
+function render() {
+  board.forEach(function(sq, idx) {
+    squares[idx].style.background = lookup[sq];
+  });
+  if (winner === 'T') {
+    message.innerHTML = 'Its A Tie!';
+  } else if (winner) {
+    message.innerHTML = `Congrats ${lookup[winner].toUpperCase()} you won!';} else {
+    message.innerHTML = `${lookup[turn].toUpperCase()}'s Turn`;
   }
+};
 
-  function getWinner() {
-    let winner = null;
-    winningCombos.forEach(function (combo, index) {
-      if (
-        board[combo[0]] &&
-        board[combo[0]] === board[combo[1]] &&
-        board[combo[0]] === board[combo[2]]
-      )
-        winner = board[combo[0]];
-    });
-    return winner ? winner : board.includes("") ? null : "P";
-  }
+function initialize() {
+  board = [null, null, null, null, null, null, null, null, null];
 
-  function handleTurn() {
-    let idx = squares.findIndex(function (box) {
-      return box === event.target;
-    });
-    board[idx] = turn;
-    turn = turn === "X" ? "O" : "X";
-    win = getWinner();
-    render();
-  }
-}
-
-init();
+  turn = 1;
+  winner = null;
+  render();
+};
