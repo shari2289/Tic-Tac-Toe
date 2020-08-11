@@ -17,7 +17,9 @@ const winningCombos = [
 ];
 
 /*----- app's state (variables) -----*/
-let board, turn, winner;
+let board,
+let turn, 
+let winner,
 
 /*----- cached element references -----*/
 const squares = document.querySelectorAll("td div");
@@ -59,9 +61,9 @@ function render() {
     squares[idx].style.background = lookup[sq];
   });
   if (winner === "T") {
-    message.innerHTML = "Rats, another tie!";
+    message.innerHTML = "CAT'S GAMES";
   } else if (winner) {
-    message.innerHTML = `Congrats ${lookup[winner].toUpperCase()}!`;
+    message.innerHTML = `Congrats ${lookup[winner].toUpperCase()}! You Won!`;
   } else {
     message.innerHTML = `${lookup[turn].toUpperCase()}'s Turn`;
   }
@@ -69,8 +71,6 @@ function render() {
 
 function initialize() {
   board = [null, null, null, null, null, null, null, null, null];
-  // OR initialize like this:
-  // board = new Array(9).fill(null);
   turn = 1;
   winner = null;
   render();
