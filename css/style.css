@@ -6,7 +6,7 @@ body {
 
 * {
   box-sizing: border-box;
-  font-family: helvetica;
+  font-family: Helvetica;
 }
 
 body {
@@ -35,20 +35,20 @@ td div {
 }
 
 tr td:nth-child(2) {
-  border-left: 4px dashed pink;
-  border-right: 4px dashed pink;
+  border-left: 4px dashed grey;
+  border-right: 4px dashed grey;
 }
 
 tr:nth-child(2) td {
-  border-top: 4px dashed pink;
-  border-bottom: 4px dashed pink;
+  border-top: 4px dashed grey;
+  border-bottom: 4px dashed grey;
 }
 
 button {
   margin-top: 30px;
   padding: 15px;
-  background-color: lightcoral;
-  color: black;
+  background-color: black;
+  color: white;
   border-radius: 5px;
   font-size: 20px;
 }
